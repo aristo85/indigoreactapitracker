@@ -1,7 +1,7 @@
 export const setToken = (token) => {
-  localStorage.setItem("swToken", token);
+  localStorage.setItem("apiTrackerToken", token);
 };
 
-export const getToken = () => localStorage.getItem("swToken");
+export const getToken = () => localStorage.getItem("apiTrackerToken");
 
-export const removeToken = () => localStorage.removeItem("swToken");
+export const removeToken = () => localStorage.removeItem("apiTrackerToken");
