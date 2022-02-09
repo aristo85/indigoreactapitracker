@@ -1,3 +1,3 @@
 export const config = {
-  apiUrl: "https://indigoapikeys.herokuapp.com/",
+  apiUrl: "https://indigoapitracker.herokuapp.com/api/",
 };
