@@ -5,7 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: darkslategrey;
+  background-color: #132737;
+  text-align: center;
+  margin-top: 2em;
 }
 
 code {
@@ -67,4 +69,61 @@ code {
 
 .form-auth-error-input {
   color: red;
+}
+
+.tooltip {
+  border-radius: 0.25rem;
+  background: #26313c;
+  color: #fff;
+  padding: 1rem;
+  box-shadow: 15px 30px 40px 5px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.btnCharts-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-bottom: 15px;
+}
+
+.btnCharts {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 24px;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  /* cursor: pointer; */
+  border: 1px solid transparent;
+  border-radius: 4px;
+  width: 45%;
+}
+
+.btnCharts-2{
+  background-color: rgba(194, 245, 160, 0.6);
+}
+
+.btnCharts-1{
+  background-color: rgba(231, 187, 217, 0.6);
+}
+
+h2 {
+  color: white;
+}
+
+p {
+  color: white;
+}
+
+.acc-info {
+  margin: 10%;
+}
+
+.acc-info span {
+  color: aqua;
+  font-size: 18px;
+  margin-right: 5px;
 }

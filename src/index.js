@@ -4,12 +4,10 @@ import './index.css';
 import App from './App';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
-import MenuAppBarr from './components/NavBar';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <MenuAppBarr />
       <App />
     </Provider>
   </React.StrictMode>,

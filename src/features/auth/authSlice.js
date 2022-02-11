@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { config } from "../../config";
 import axios from "axios";
-import { setToken } from "../../app/localstorage";
+import { removeToken, setToken } from "../../app/localstorage";
 
 const initialState = {
   token: null,
@@ -82,13 +82,17 @@ export const authSlice = createSlice({
 
   reducers: {
     setAuth: (state, action) => {
-      state.isAuth = action.payload;
+      state.isAuth = !!action.payload;
+      state.token = action.payload;
     },
     clearAuthError: (state) => {
       state.error = null;
       state.isResetedPass = false;
     },
-    setLogout: () => initialState,
+    setLogout: () => {
+      removeToken();
+      return initialState;
+    },
     setForgotPass: (state, action) => {
       state.isForgotPass = action.payload;
       state.error = null;

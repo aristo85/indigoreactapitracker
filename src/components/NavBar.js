@@ -16,15 +16,17 @@ import {
 } from "../features/auth/authSlice";
 import { Menu, MenuItem } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { getToken, removeToken } from "../app/localstorage";
+import { getToken } from "../app/localstorage";
 import ForgotPassword from "../modules/auth/ForgotPassword";
 import ResetForgotenPassword from "../modules/auth/ResetForgotenPassword";
+import { useNavigate } from "react-router-dom";
 
-export default function MenuAppBarr() {
+export default function MenuAppBarr({ children }) {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const auth = useSelector(selectIsAuth);
   const isForgotPass = useSelector(selectForgotPass);
+  const navigate = useNavigate();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,8 +36,12 @@ export default function MenuAppBarr() {
     setAnchorEl(null);
   };
 
+  const handleInfo = () => {
+    navigate("/account");
+    handleClose();
+  };
+
   const handleLogout = () => {
-    removeToken();
     dispatch(setLogout());
     handleClose();
   };
@@ -43,70 +49,84 @@ export default function MenuAppBarr() {
   React.useEffect(() => {
     const isAuth = getToken();
     if (isAuth) {
-      dispatch(setAuth(true));
+      dispatch(setAuth(isAuth));
     }
   }, []);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" color="inherit">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon size="large" />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            LOGO
-          </Typography>
-          <div>
+    <>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="fixed" color="inherit">
+          <Toolbar>
             <IconButton
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
+              size="large"
+              edge="start"
               color="inherit"
-              onClick={auth && handleMenu}
+              aria-label="menu"
+              sx={{ mr: 2 }}
             >
-              {auth ? (
-                <AccountCircle style={{ height: "40px", width: "40px" }} />
-              ) : (
-                <Modala>
-                  {!isForgotPass ? (
-                    <Tabsi />
-                  ) : isForgotPass === "resetCode" ? (
-                    <ForgotPassword />
-                  ) : (
-                    <ResetForgotenPassword />
-                  )}
-                </Modala>
-              )}
+              <MenuIcon size="large" />
             </IconButton>
-            {auth && (
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2, flexGrow: 1 }}
+              onClick={() => navigate("/")}
+            >
+              <Typography variant="h6" component="div">
+                LOGO
+              </Typography>
+            </IconButton>
+
+            <div>
+              <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                color="inherit"
+                onClick={auth && handleMenu}
               >
-                <MenuItem onClick={handleLogout}>logout</MenuItem>
-              </Menu>
-            )}
-          </div>
-        </Toolbar>
-      </AppBar>
-    </Box>
+                {auth ? (
+                  <AccountCircle style={{ height: "40px", width: "40px" }} />
+                ) : (
+                  <Modala>
+                    {!isForgotPass ? (
+                      <Tabsi />
+                    ) : isForgotPass === "resetCode" ? (
+                      <ForgotPassword />
+                    ) : (
+                      <ResetForgotenPassword />
+                    )}
+                  </Modala>
+                )}
+              </IconButton>
+              {auth && (
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleInfo}>Info</MenuItem>
+                  <MenuItem onClick={handleLogout}>logout</MenuItem>
+                </Menu>
+              )}
+            </div>
+          </Toolbar>
+        </AppBar>
+      </Box>
+      <div style={{ marginTop: "5rem" }}>{children}</div>
+    </>
   );
 }

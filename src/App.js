@@ -1,13 +1,11 @@
-import React from 'react';
-import './App.css';
-import Landing from './pages/Landing';
+import React from "react";
+import "./App.css";
+import RoutesProvider from "./modules/RoutesProvider";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <Landing />
-      </header>
+      <RoutesProvider />
     </div>
   );
 }

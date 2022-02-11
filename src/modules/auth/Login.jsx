@@ -1,24 +1,27 @@
-import React, { useEffect } from "react";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import * as yup from "yup";
 import { useForm, useFormState } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectAuthErr,
   selectAuthStatus,
-  userSignup,
+  selectResetedPass,
+  setForgotPass,
+  userLogin,
 } from "../../features/auth/authSlice";
 import BtnLoading from "../../components/BtnLoading";
+import Snackbari from "../../components/Snackbar";
 
-const Signup = () => {
+const LoginForm = ({}) => {
   const dispatch = useDispatch();
   const status = useSelector(selectAuthStatus);
   const err = useSelector(selectAuthErr);
+  const isResetedPass = useSelector(selectResetedPass);
 
   const validationSchema = useMemo(() => {
     return yup.object().shape({
-      username: yup.string().min(3).max(255).required(),
       email: yup.string().email().required(),
       password: yup.string().min(5).max(255).required(),
     });
@@ -26,7 +29,6 @@ const Signup = () => {
   // form
   const { register, handleSubmit, control, watch, setError } = useForm({
     defaultValues: {
-      username: "",
       email: "",
       password: "",
     },
@@ -38,7 +40,7 @@ const Signup = () => {
   const { errors } = useFormState({ control });
 
   const handleFormSubmit = () => {
-    dispatch(userSignup(formValues));
+    dispatch(userLogin(formValues));
   };
 
   useEffect(() => {
@@ -47,24 +49,8 @@ const Signup = () => {
 
   return (
     <div>
-      <h2 className="form-auth-h2">
-        Create an account with SuperWorld to start buy and selling NFTs.
-      </h2>
+      <h2 className="form-auth-h2">Welcome Back!</h2>
       <form onSubmit={handleSubmit(handleFormSubmit)} className="loginForm">
-        <div>
-          <input
-            placeholder="Username*"
-            className="formInput"
-            style={{
-              border: errors.email && "2px solid red",
-            }}
-            {...register("username")}
-          />
-          <br />
-          <span className="form-auth-error-input">
-            {errors?.username?.message}
-          </span>
-        </div>
         <div>
           <input
             placeholder="Email*"
@@ -96,20 +82,28 @@ const Signup = () => {
         </div>
 
         <br />
+        {/* <div style={{ textAlign: "end" }}>
+          <Button
+            onClick={() => dispatch(setForgotPass("resetCode"))}
+            style={{ textTransform: "none" }}
+          >
+            Forgot Password?
+          </Button>
+        </div>
+        <br /> */}
         <div className="form-auth-loading-btn">
           <BtnLoading
             type="submit"
-            title="Create Account"
+            title="Log In"
             variant="contained"
             loading={status === "loading"}
-            disabled={
-              !formValues.email || !formValues.password || !formValues.username
-            }
+            disabled={!formValues.email || !formValues.password}
           />
         </div>
       </form>
+      {isResetedPass && <Snackbari message="Your password has been changed" />}
     </div>
   );
 };
 
-export default Signup;
+export default LoginForm;
