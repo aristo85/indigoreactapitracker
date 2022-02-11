@@ -34,12 +34,6 @@ code {
 .mymodal {
   width: 500px;
 }
-/*mobile responsive*/
-@media screen and (max-width: 700px) {
-  .mymodal {
-    width: 90%;
-  }
-}
 
 .landingAuth {
   background-color: lightsalmon;
@@ -91,7 +85,7 @@ code {
   display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;
-  font-size: 24px;
+  font-size: 1;
   line-height: 1.42857143;
   text-align: center;
   white-space: nowrap;
@@ -126,4 +120,16 @@ p {
   color: aqua;
   font-size: 18px;
   margin-right: 5px;
+}
+/*mobile responsive*/
+@media screen and (max-width: 700px) {
+  .mymodal {
+    width: 90%;
+  }
+  .btnCharts-group{
+    display: inherit;
+  }
+  .btnCharts{
+    width: 100vw;
+  }
 }
