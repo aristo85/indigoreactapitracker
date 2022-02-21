@@ -1,5 +1,6 @@
-export const setToken = (token) => {
-  localStorage.setItem("apiTrackerToken", token);
+export const setToken = (data) => {
+  const dataStr = JSON.stringify(data);
+  localStorage.setItem("apiTrackerToken", dataStr);
 };
 
 export const getToken = () => localStorage.getItem("apiTrackerToken");

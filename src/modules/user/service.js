@@ -1,11 +1,30 @@
 import moment from "moment";
 
-export const CustomizedAxisTick = (num) => {
-  return moment(num / 1000, "X").format("ddd, hA");
+export const CustomizedAxisTick = (num, period) => {
+  return moment(num / 1000, "X").format(
+    period === "Last day" ? "dddd, hA" : " MM Do YYYY"
+  );
 };
 
-export const typeCounter = (arr, type) => {
-  return arr?.filter((el) => el.type === type).length;
+export const setStartDate = (period) => {
+  const periodNumber =
+    period === "Last day" ? 1 : period === "Last week" ? 7 : 30;
+  return new Date().getTime() - periodNumber * 24 * 60 * 60 * 1000;
+};
+
+export const typeCounter = (data, period) => {
+  let initialValue = 0;
+  let sum = data.reduce(
+    (previousValue, currentValue) => previousValue + currentValue.usage,
+    initialValue
+  );
+  const average =
+    period === "Last day"
+      ? `${(sum / 24).toFixed(1)} req/hr`
+      : period === "Last week"
+      ? `${(sum / 7).toFixed(1)} req/day`
+      : `${(sum / 30).toFixed(1)} req/day`;
+  return { sum, average };
 };
 
 export const findUsages = (arr, key) => {
@@ -39,29 +58,25 @@ export const findUsages = (arr, key) => {
   return arr2;
 };
 
-export const formatterLastDay = (arr) => {
+export const dataFormater = (arr, period) => {
   if (!arr) return;
-  const currT = new Date().getTime();
-  const startT = currT - 24 * 60 * 60 * 1000;
+  const startT = setStartDate(period);
   let data1 = [];
   let data2 = [];
-  let lastDayList = arr
+  arr
     .filter((el) => el.createdAt > startT)
     .map((el) => {
-      const date = moment(el.createdAt).startOf("hour").valueOf();
+      const date = moment(el.createdAt)
+        .startOf(period === "Last day" ? "hour" : "day")
+        .valueOf();
       el.type === 1
         ? data1.push({ type: el.type, date, route: el.route })
         : data2.push({ type: el.type, date, route: el.route });
       return el;
     });
-  const oneH = 60 * 60 * 1000;
 
   data1 = findUsages(data1, "date");
   data2 = findUsages(data2, "date");
 
   return { data1, data2 };
-  //   arr.map((el) => ({
-  //     rate: el.rate,
-  //     date: moment(el.date_time_w_tz).valueOf(),
-  //   }));
 };

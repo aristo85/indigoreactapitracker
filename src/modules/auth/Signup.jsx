@@ -9,7 +9,7 @@ import {
   selectAuthStatus,
   userSignup,
 } from "../../features/auth/authSlice";
-import BtnLoading from "../../components/BtnLoading";
+import BtnLoading from "../../components/buttons/BtnLoading";
 
 const Signup = () => {
   const dispatch = useDispatch();

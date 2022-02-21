@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { useForm, useFormState } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import BtnLoading from "../../components/BtnLoading";
+import BtnLoading from "../../components/buttons/BtnLoading";
 import {
   selectAuthErr,
   selectAuthStatus,

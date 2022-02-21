@@ -11,14 +11,16 @@ import {
   setForgotPass,
   userLogin,
 } from "../../features/auth/authSlice";
-import BtnLoading from "../../components/BtnLoading";
+import BtnLoading from "../../components/buttons/BtnLoading";
 import Snackbari from "../../components/Snackbar";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({}) => {
   const dispatch = useDispatch();
   const status = useSelector(selectAuthStatus);
   const err = useSelector(selectAuthErr);
   const isResetedPass = useSelector(selectResetedPass);
+  const navigate = useNavigate();
 
   const validationSchema = useMemo(() => {
     return yup.object().shape({
@@ -39,8 +41,11 @@ const LoginForm = ({}) => {
 
   const { errors } = useFormState({ control });
 
-  const handleFormSubmit = () => {
-    dispatch(userLogin(formValues));
+  const handleFormSubmit = async () => {
+    const result = await dispatch(userLogin(formValues));
+    if (userLogin.fulfilled.match(result)) {
+      navigate("/", { replace: true });
+    }
   };
 
   useEffect(() => {

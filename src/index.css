@@ -97,19 +97,11 @@ code {
 }
 
 .btnCharts-2{
-  background-color: rgba(194, 245, 160, 0.6);
+  background-color: rgba(194, 245, 160, 0.2);
 }
 
 .btnCharts-1{
-  background-color: rgba(231, 187, 217, 0.6);
-}
-
-h2 {
-  color: white;
-}
-
-p {
-  color: white;
+  background-color: rgba(231, 187, 217, 0.2);
 }
 
 .acc-info {

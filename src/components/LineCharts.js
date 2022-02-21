@@ -9,7 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { CustomizedAxisTick } from "../service";
+import { CustomizedAxisTick } from "../modules/user/service";
 import CustomTooltip from "./CustomTooltip";
 
 const LineCharts = ({ mydata1, mydata2 }) => {

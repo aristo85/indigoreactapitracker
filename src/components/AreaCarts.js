@@ -9,9 +9,12 @@ import {
   YAxis,
 } from "recharts";
 import CustomTooltip from "../components/CustomTooltip";
-import { CustomizedAxisTick } from "../service";
+import { CustomizedAxisTick, setStartDate } from "../modules/user/service";
 
-const AreaCarts = ({ mydata1, mydata2, mydata3 }) => {
+const AreaCarts = ({ mydata1, mydata2, period }) => {
+  const currT = new Date().getTime();
+  const minDate = setStartDate(period);
+
   return (
     <ResponsiveContainer width="95%" aspect={3}>
       <AreaChart>
@@ -27,12 +30,12 @@ const AreaCarts = ({ mydata1, mydata2, mydata3 }) => {
             <stop offset="75%" stopColor="#82ca9d" stopOpacity={0.05} />
           </linearGradient>
         </defs>
-        <defs>
+        {/* <defs>
           <linearGradient id="color3" x1={0} y1={0} x2={0} y2={1}>
             <stop offset="0%" stopColor="#8884d8" stopOpacity={0.4} />
             <stop offset="75%" stopColor="#8884d8" stopOpacity={0.05} />
           </linearGradient>
-        </defs>
+        </defs> */}
         <Area
           type="monotone"
           data={mydata1}
@@ -56,25 +59,25 @@ const AreaCarts = ({ mydata1, mydata2, mydata3 }) => {
         /> */}
         <XAxis
           dataKey="date"
-          scale="time"
+          // scale="time"
           axisLine={false}
           tickLine={false}
           type="number"
-          tickFormatter={CustomizedAxisTick}
-          domain={["dataMin - 100", "dataMax + 100"]}
+          tickFormatter={(num) => CustomizedAxisTick(num, period)}
+          domain={[minDate, currT]}
           tick={{ fill: "#fff" }}
-          tickCount={12}
+          // tickCount={12}
         />
         <YAxis
           axisLine={false}
           tickLine={false}
           type="number"
-          // domain={[5, "dataMax + 10"]}
+          domain={["dataMin - 0.5", "dataMax + 1"]}
           tick={{ fill: "#fff" }}
-          tickCount={5}
+          // tickCount={5}
           tickFormatter={(number) => number.toFixed(0)}
         />
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip content={<CustomTooltip />} cursor={false} />
         <CartesianGrid opacity={0.1} horizontal vertical="" color="#243240" />
       </AreaChart>
     </ResponsiveContainer>

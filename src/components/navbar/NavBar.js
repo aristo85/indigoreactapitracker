@@ -6,26 +6,33 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import Modala from "./Modal";
-import Tabsi from "./Tabs";
 import {
-  selectForgotPass,
   selectIsAuth,
+  selectRole,
   setAuth,
   setLogout,
-} from "../features/auth/authSlice";
+} from "../../features/auth/authSlice";
 import { Menu, MenuItem } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { getToken } from "../app/localstorage";
-import ForgotPassword from "../modules/auth/ForgotPassword";
-import ResetForgotenPassword from "../modules/auth/ResetForgotenPassword";
+import { getToken } from "../../app/localstorage";
 import { useNavigate } from "react-router-dom";
+import { themColors } from "../../app/constants";
+
+const accMenu = [
+  { item: "Account Info", path: "/account" },
+  { item: "Billing", path: "/billing" },
+  { item: "Logout", path: "/" },
+];
+const accMenuAdmin = [
+  { item: "Account Info", path: "/account" },
+  { item: "Logout", path: "/" },
+];
 
 export default function MenuAppBarr({ children }) {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const auth = useSelector(selectIsAuth);
-  const isForgotPass = useSelector(selectForgotPass);
+  const role = useSelector(selectRole);
   const navigate = useNavigate();
 
   const handleMenu = (event) => {
@@ -36,32 +43,31 @@ export default function MenuAppBarr({ children }) {
     setAnchorEl(null);
   };
 
-  const handleInfo = () => {
-    navigate("/account");
-    handleClose();
-  };
-
-  const handleLogout = () => {
-    dispatch(setLogout());
+  const handleAccMenu = (item, path) => {
+    if (item === "Logout") {
+      dispatch(setLogout());
+    }
+    navigate(path);
     handleClose();
   };
 
   React.useEffect(() => {
     const isAuth = getToken();
-    if (isAuth) {
-      dispatch(setAuth(isAuth));
+    const authData = isAuth && JSON.parse(isAuth);
+
+    if (authData) {
+      dispatch(setAuth(authData));
     }
   }, []);
 
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="fixed" color="inherit">
-          <Toolbar>
+        <AppBar position="fixed" sx={{ bgcolor: themColors.basic }}>
+          <Toolbar sx={{ justifyContent: "space-between" }}>
             <IconButton
               size="large"
               edge="start"
-              color="inherit"
               aria-label="menu"
               sx={{ mr: 2 }}
             >
@@ -70,12 +76,14 @@ export default function MenuAppBarr({ children }) {
             <IconButton
               size="large"
               edge="start"
-              color="inherit"
               aria-label="menu"
-              sx={{ mr: 2, flexGrow: 1 }}
               onClick={() => navigate("/")}
             >
-              <Typography variant="h6" component="div">
+              <Typography
+                variant="h6"
+                component="div"
+                color={themColors.primary}
+              >
                 LOGO
               </Typography>
             </IconButton>
@@ -85,22 +93,9 @@ export default function MenuAppBarr({ children }) {
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                color="inherit"
                 onClick={auth && handleMenu}
               >
-                {auth ? (
-                  <AccountCircle style={{ height: "40px", width: "40px" }} />
-                ) : (
-                  <Modala>
-                    {!isForgotPass ? (
-                      <Tabsi />
-                    ) : isForgotPass === "resetCode" ? (
-                      <ForgotPassword />
-                    ) : (
-                      <ResetForgotenPassword />
-                    )}
-                  </Modala>
-                )}
+                <AccountCircle sx={{ height: "40px", width: "40px" }} />
               </IconButton>
               {auth && (
                 <Menu
@@ -118,15 +113,32 @@ export default function MenuAppBarr({ children }) {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleInfo}>Info</MenuItem>
-                  <MenuItem onClick={handleLogout}>logout</MenuItem>
+                  {role === "admin"
+                    ? accMenuAdmin.map(({ item, path }, indx) => (
+                        <MenuItem
+                          key={`${item}-${indx}`}
+                          onClick={() => handleAccMenu(item, path)}
+                        >
+                          {item}
+                        </MenuItem>
+                      ))
+                    : accMenu.map(({ item, path }, indx) => (
+                        <MenuItem
+                          key={`${item}-${indx}`}
+                          onClick={() => handleAccMenu(item, path)}
+                        >
+                          {item}
+                        </MenuItem>
+                      ))}
                 </Menu>
               )}
             </div>
           </Toolbar>
         </AppBar>
       </Box>
-      <div style={{ marginTop: "5rem" }}>{children}</div>
+      <div style={{ marginTop: "5rem", color: themColors.basic }}>
+        {children}
+      </div>
     </>
   );
 }

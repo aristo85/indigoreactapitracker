@@ -11,7 +11,7 @@ import {
   setForgotPass,
   userResetForgotenPass,
 } from "../../features/auth/authSlice";
-import BtnLoading from "../../components/BtnLoading";
+import BtnLoading from "../../components/buttons/BtnLoading";
 import Snackbar from "../../components/Snackbar";
 
 const ResetForgotenPassword = () => {

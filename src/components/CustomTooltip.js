@@ -1,5 +1,5 @@
 import React from "react";
-import { CustomizedAxisTick } from "../service";
+import { CustomizedAxisTick } from "../modules/user/service";
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active) {
@@ -10,8 +10,8 @@ const CustomTooltip = ({ active, payload, label }) => {
     return (
       <div className="tooltip">
         <h4>{lab}</h4>
-        <h5 style={{color: '#eb2689'}}>{"users: " + users}</h5>
-        <h5 style={{color: '#82ca9d'}}>{"arthing: " + arthing}</h5>
+        <h5 style={{ color: "#eb2689" }}>{"users: " + users}</h5>
+        <h5 style={{ color: "#82ca9d" }}>{"arthing: " + arthing}</h5>
         {/* <h5 style={{color: '#8884d8'}}>{"rate3: " + rate3}</h5> */}
       </div>
     );

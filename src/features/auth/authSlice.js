@@ -10,6 +10,7 @@ const initialState = {
   error: null,
   isForgotPass: false,
   isResetedPass: false,
+  role: null,
 };
 
 export const userLogin = createAsyncThunk(
@@ -17,7 +18,8 @@ export const userLogin = createAsyncThunk(
   async (body, thunkApi) => {
     try {
       const response = await axios.post(config.apiUrl + "auth/login", body);
-      if (response.data) setToken(response.data.token);
+      if (response.data)
+        setToken({ token: response.data.token, role: response.data.role });
       return response.data;
     } catch (error) {
       return thunkApi.rejectWithValue({
@@ -83,7 +85,8 @@ export const authSlice = createSlice({
   reducers: {
     setAuth: (state, action) => {
       state.isAuth = !!action.payload;
-      state.token = action.payload;
+      state.token = action.payload.token;
+      state.role = action.payload.role;
     },
     clearAuthError: (state) => {
       state.error = null;
@@ -106,6 +109,7 @@ export const authSlice = createSlice({
       .addCase(userLogin.fulfilled, (state, action) => {
         state.status = "idle";
         state.token = action?.payload?.token;
+        state.role = action?.payload?.role;
         state.isAuth = true;
       })
       .addCase(userLogin.rejected, (state, { payload }) => {
@@ -158,6 +162,7 @@ export const selectToken = (state) => state.auth.token;
 export const selectAuthStatus = (state) => state.auth.status;
 export const selectAuthErr = (state) => state.auth.error;
 export const selectIsAuth = (state) => state.auth.isAuth;
+export const selectRole = (state) => state.auth.role;
 export const selectForgotPass = (state) => state.auth.isForgotPass;
 export const selectResetedPass = (state) => state.auth.isResetedPass;
 

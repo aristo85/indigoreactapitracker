@@ -21,6 +21,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
+    "react-stripe-checkout": "^2.6.3",
     "recharts": "^2.1.8",
     "yup": "^0.32.11"
   },
